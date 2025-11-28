@@ -1,10 +1,15 @@
+
+
 <!DOCTYPE html>
 <html lang="te">
 <head>
   <meta charset="UTF-8" />
-  <title>Song Sheet Generator (Telugu - Enhanced)</title>
+  <title>Song Sheet Generator (Telugu - A4)</title>
+
+  <!-- Telugu-friendly font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap">
+
   <style>
     * {
       box-sizing: border-box;
@@ -542,509 +547,382 @@
   <div class="app">
     <div class="no-print">
       <h1>✨ Song Sheet Generator</h1>
-      <div class="subtitle">Telugu • Lyrics Only • A4 • Print-Ready</div>
+      <div class="subtitle">
+        Telugu · Lyrics only · A4 · Auto layout (2 columns) · Spiritual Collection
+      </div>
 
-      <div class="wrapper">
-        <div class="left-right-section">
-          <!-- LEFT: Add Song & Settings -->
-          <div class="card">
-            <div class="section">
-              <div class="section-title">⛪ Church</div>
-              <div class="form-group">
-                <label for="churchName">Church Name</label>
-                <input type="text" id="churchName" placeholder="e.g., Living Hope Church">
-              </div>
-            </div>
-
-            <div class="section">
-              <div class="section-title">✍️ Add Song</div>
-              <div class="form-group">
-                <label for="songTitle">Song Title</label>
-                <input type="text" id="songTitle" placeholder="Enter song title">
-              </div>
-
-              <div class="form-group">
-                <label for="songLyrics">Lyrics</label>
-                <textarea id="songLyrics" placeholder="Enter lyrics&#10;(each line on new line)"></textarea>
-              </div>
-
-              <button id="addSongBtn" class="btn-full btn-success">✅ Add Song</button>
-              <div class="hint">✏️ After adding, you can edit or delete songs from the list below.</div>
-            </div>
-
-            <div class="section">
-              <div class="section-title">⚙️ Settings</div>
-              <div class="form-group">
-                <label for="columns">Layout</label>
-                <select id="columns">
-                  <option value="2">2 Columns</option>
-                  <option value="1">1 Column (Center)</option>
-                </select>
-              </div>
-
-              <div class="row">
-                <div class="form-group">
-                  <label for="fontSize">Font Size</label>
-                  <select id="fontSize">
-                    <option value="11">11px</option>
-                    <option value="12">12px</option>
-                    <option value="13" selected>13px</option>
-                    <option value="14">14px</option>
-                    <option value="15">15px</option>
-                    <option value="16">16px</option>
-                    <option value="17">17px</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="lineHeight">Line Height</label>
-                  <select id="lineHeight">
-                    <option value="1.2">Compact</option>
-                    <option value="1.3" selected>Normal</option>
-                    <option value="1.4">Spacious</option>
-                    <option value="1.5">Extra</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="section">
-              <div class="section-title">🎯 Auto-fit</div>
-              <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" id="autoFitToggle" style="width: 18px; height: 18px; cursor: pointer;">
-                <label for="autoFitToggle" style="margin: 0;">Enable Auto-fit</label>
-              </div>
-
-              <div id="autoFitOptions" style="display: none; margin-top: 14px;">
-                <div class="row">
-                  <div class="form-group">
-                    <label for="targetPages">Pages</label>
-                    <select id="targetPages">
-                      <option value="1">1</option>
-                      <option value="2" selected>2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="statsBox" class="stat-box" style="display: none;"></div>
-
-            <div class="action-buttons">
-              <button id="printBtn" class="btn-success">🖨️ Print</button>
-              <button id="clearAllBtn" class="btn-danger">🗑️ Clear</button>
-            </div>
+      <div class="card">
+        <div class="row">
+          <div style="flex:1 1 200px;">
+            <label for="churchName">⛪ Church Name (Optional):</label>
           </div>
+          <input type="text" id="churchName" placeholder="e.g., Living Hope Church" style="flex:1 1 250px; padding: 8px 12px; border-radius: 10px; border: 2px solid #c7d2fe; font-size: 14px;">
+        </div>
 
-          <!-- MIDDLE: Songs List -->
-          <div class="card">
-            <div class="section-title">📋 Songs (Drag to Reorder)</div>
-            <div class="songs-list" id="songsList">
-              <div class="empty-songs">No songs yet</div>
-            </div>
+        <div class="row" style="margin-top: 12px;">
+          <div style="flex:1 1 200px;">
+            <label for="rawInput">✍️ Paste all songs here:</label>
           </div>
         </div>
 
-        <!-- RIGHT: Preview -->
-        <div class="card preview-card">
-          <div class="preview-header">
-            <div>🔍 Preview (Print View)</div>
+        <textarea id="rawInput" placeholder="ఉదాహరణ:
+
+Yesu Naa Rakshakudu
+లైన్ 1
+లైన్ 2
+లైన్ 3
+
+---
+Naa Prabhu Naa Devudu
+లైన్ 1
+లైన్ 2
+"></textarea>
+
+        <div class="hint">
+          👉 ప్రతి పాట మధ్యలో ఒక లైన్‌లో <strong>---</strong> (మూడు డాష్‌లు) పెట్టండి.<br />
+          👉 ప్రతి బ్లాక్‌లో <strong>మొదటి లైన్ పాట టైటిల్</strong> గా తీసుకుంటాం.
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div class="controls-inline">
+            <label for="fontSize">📏 Font size:</label>
+            <select id="fontSize">
+              <option value="11">Extra Small (11)</option>
+              <option value="12">Small (12)</option>
+              <option value="13" selected>Normal (13)</option>
+              <option value="14">Large (14)</option>
+              <option value="15">Extra Large (15)</option>
+              <option value="16">XXL (16)</option>
+              <option value="17">XXXL (17)</option>
+              <option value="18">Giant (18)</option>
+            </select>
+
+            <label for="columns">📄 Columns:</label>
+            <select id="columns">
+              <option value="2" selected>2 columns</option>
+              <option value="1">1 column</option>
+            </select>
           </div>
-          <div class="preview-box" id="previewBox">
-            <div id="sheetsContainer">
-              <div style="font-size:14px; color:#a5b4fc; padding: 40px 20px; text-align: center; font-weight: 500;">
-                Add songs to see preview
-              </div>
+
+          <div style="margin-left:auto;">
+            <button id="generateBtn">
+              ⚙️ Generate Sheets
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid #c7d2fe;">
+          <div style="margin-bottom: 12px;">
+            <label style="font-weight: 700; color: #1e3a8a; font-size: 15px;">📋 Auto-fit Pages (Optional)</label>
+            <div class="hint" style="margin-top: 6px;">
+              Enable this to automatically adjust font sizes based on total songs and pages. Font size dropdown will be disabled.
+            </div>
+          </div>
+
+          <div class="row">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="autoFitToggle" style="width: 18px; height: 18px; cursor: pointer;">
+              <span style="color: #1e3a8a; font-weight: 500;">Enable Auto-fit</span>
+            </label>
+          </div>
+
+          <div class="row" style="margin-top: 12px; gap: 20px; display: none;" id="autoFitOptions">
+            <div style="flex: 1 1 200px;">
+              <label for="totalSongs">Total Songs:</label>
+              <input type="number" id="totalSongs" min="1" max="100" value="20" style="width: 100%; padding: 8px 10px; border-radius: 10px; border: 2px solid #c7d2fe;">
+            </div>
+
+            <div style="flex: 1 1 200px;">
+              <label for="totalPages">Total Pages:</label>
+              <select id="totalPages" style="width: 100%; padding: 8px 10px; border-radius: 10px; border: 2px solid #c7d2fe;">
+                <option value="1">1 Page (Front only)</option>
+                <option value="2" selected>2 Pages (Front & Back)</option>
+                <option value="3">3 Pages</option>
+                <option value="4">4 Pages</option>
+                <option value="5">5 Pages</option>
+              </select>
+            </div>
+
+            <div style="flex: 1 1 200px;">
+              <label for="sheetsPerPage">Sheets per Page:</label>
+              <select id="sheetsPerPage" style="width: 100%; padding: 8px 10px; border-radius: 10px; border: 2px solid #c7d2fe;">
+                <option value="1" selected>1 Sheet per Page</option>
+                <option value="2">2 Sheets per Page</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 12px; padding: 12px; background: rgba(30, 64, 175, 0.08); border-radius: 8px; border-left: 4px solid #1e40af; display: none;" id="autoFitInfo">
+            <div style="font-size: 13px; color: #1e3a8a; font-weight: 500;">
+              📊 <span id="songCountDisplay"></span> songs will fit in <span id="pageCountDisplay"></span> pages • Font size: <span id="fontSizeDisplay" style="font-weight: 700; color: #1e40af;"></span>px
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PRINT CONTENT -->
-    <div class="print-container" id="printContainer">
-      <div id="sheetsContainerPrint"></div>
-    </div>
-  </div>
-
-  <!-- EDIT MODAL -->
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeEditModal()">&times;</span>
-      <div class="modal-header">✏️ Edit Song</div>
-      
-      <div class="form-group">
-        <label for="editTitle">Song Title</label>
-        <input type="text" id="editTitle" placeholder="Enter song title">
+    <div class="card preview-wrapper">
+      <div class="preview-header no-print">
+        <div>🔍 Preview (what will be printed on A4)</div>
+        <div class="controls-inline">
+          <button onclick="window.print()">🖨️ Print</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="editLyrics">Lyrics</label>
-        <textarea id="editLyrics" placeholder="Enter lyrics" style="min-height: 200px;"></textarea>
-      </div>
-
-      <div class="modal-buttons">
-        <button onclick="closeEditModal()" class="btn-danger" style="width: 100%; margin: 0;">Cancel</button>
-        <button onclick="saveEditedSong()" class="btn-success" style="width: 100%; margin: 0;">Save Changes</button>
+      <div class="preview-box">
+        <div id="sheetsContainer">
+          <!-- Generated content goes here -->
+          <div class="sheet columns-2" id="emptyState">
+            <div style="font-size:13px; color:#a5b4fc;">
+              పైన ఉన్న బాక్స్‌లో పాటలు పేస్ట్ చేసి <b>"Generate Sheets"</b> నొక్కండి.  
+              ఇక్కడ ప్రింట్ అవుట్ ఎలా వస్తుందో చూపిస్తుంది.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 
   <script>
-    const songTitleInput = document.getElementById("songTitle");
-    const songLyricsInput = document.getElementById("songLyrics");
-    const addSongBtn = document.getElementById("addSongBtn");
+    const rawInput = document.getElementById("rawInput");
     const churchName = document.getElementById("churchName");
     const fontSizeSelect = document.getElementById("fontSize");
-    const lineHeightSelect = document.getElementById("lineHeight");
     const columnsSelect = document.getElementById("columns");
-    const printBtn = document.getElementById("printBtn");
-    const clearAllBtn = document.getElementById("clearAllBtn");
+    const generateBtn = document.getElementById("generateBtn");
     const sheetsContainer = document.getElementById("sheetsContainer");
-    const sheetsContainerPrint = document.getElementById("sheetsContainerPrint");
+    const emptyState = document.getElementById("emptyState");
+    
+    // Auto-fit variables
     const autoFitToggle = document.getElementById("autoFitToggle");
     const autoFitOptions = document.getElementById("autoFitOptions");
-    const targetPagesSelect = document.getElementById("targetPages");
-    const statsBox = document.getElementById("statsBox");
-    const songsList = document.getElementById("songsList");
-    const editModal = document.getElementById("editModal");
-    const editTitle = document.getElementById("editTitle");
-    const editLyrics = document.getElementById("editLyrics");
-    const printContainer = document.getElementById("printContainer");
+    const totalSongsInput = document.getElementById("totalSongs");
+    const totalPagesSelect = document.getElementById("totalPages");
+    const sheetsPerPageSelect = document.getElementById("sheetsPerPage");
 
-    let songs = [];
-    let draggedItem = null;
-    let editingIndex = -1;
-
-    function loadFromStorage() {
-      const stored = localStorage.getItem("songSheetData");
-      if (stored) {
-        try {
-          const data = JSON.parse(stored);
-          songs = data.songs || [];
-          churchName.value = data.churchName || "";
-          fontSizeSelect.value = data.fontSize || "13";
-          lineHeightSelect.value = data.lineHeight || "1.3";
-          columnsSelect.value = data.columns || "2";
-          autoFitToggle.checked = data.autoFit || false;
-          targetPagesSelect.value = data.targetPages || "2";
-          
-          autoFitOptions.style.display = autoFitToggle.checked ? "flex" : "none";
-          fontSizeSelect.disabled = autoFitToggle.checked;
-          
-          renderSongsList();
-          generateSheets();
-          updateStats();
-        } catch (e) {
-          console.log("Could not load");
-        }
-      }
-    }
-
-    function saveToStorage() {
-      const data = {
-        songs,
-        churchName: churchName.value,
-        fontSize: fontSizeSelect.value,
-        lineHeight: lineHeightSelect.value,
-        columns: columnsSelect.value,
-        autoFit: autoFitToggle.checked,
-        targetPages: targetPagesSelect.value
-      };
-      localStorage.setItem("songSheetData", JSON.stringify(data));
-    }
-
-    function addSong() {
-      const title = songTitleInput.value.trim();
-      const lyrics = songLyricsInput.value.trim();
-
-      if (!title || !lyrics) {
-        alert("Please enter both title and lyrics!");
-        return;
-      }
-
-      songs.push({ title, lyrics });
-      songTitleInput.value = "";
-      songLyricsInput.value = "";
-      songTitleInput.focus();
-      renderSongsList();
-      generateSheets();
-      updateStats();
-      saveToStorage();
-    }
-
-    function removeSong(index) {
-      songs.splice(index, 1);
-      renderSongsList();
-      generateSheets();
-      updateStats();
-      saveToStorage();
-    }
-
-    function openEditModal(index) {
-      editingIndex = index;
-      editTitle.value = songs[index].title;
-      editLyrics.value = songs[index].lyrics;
-      editModal.style.display = "block";
-      editTitle.focus();
-    }
-
-    function closeEditModal() {
-      editModal.style.display = "none";
-      editingIndex = -1;
-    }
-
-    function saveEditedSong() {
-      const title = editTitle.value.trim();
-      const lyrics = editLyrics.value.trim();
-
-      if (!title || !lyrics) {
-        alert("Please enter both title and lyrics!");
-        return;
-      }
-
-      songs[editingIndex] = { title, lyrics };
-      closeEditModal();
-      renderSongsList();
-      generateSheets();
-      updateStats();
-      saveToStorage();
-    }
-
-    function renderSongsList() {
-      if (songs.length === 0) {
-        songsList.innerHTML = '<div class="empty-songs">No songs yet</div>';
-        return;
-      }
-
-      songsList.innerHTML = songs.map((song, index) => `
-        <div class="song-item" draggable="true" data-index="${index}">
-          <div class="song-item-header">
-            <span class="song-item-number">${index + 1}</span>
-            <span class="song-item-title">${song.title}</span>
-          </div>
-          <div class="song-item-actions">
-            <button class="btn-warning" onclick="openEditModal(${index})">✏️ Edit</button>
-            <button class="btn-danger" onclick="removeSong(${index})">✕ Delete</button>
-          </div>
-        </div>
-      `).join("");
-
-      document.querySelectorAll(".song-item").forEach(item => {
-        item.addEventListener("dragstart", handleDragStart);
-        item.addEventListener("dragover", handleDragOver);
-        item.addEventListener("drop", handleDrop);
-        item.addEventListener("dragend", handleDragEnd);
-      });
-    }
-
-    function handleDragStart(e) {
-      draggedItem = this;
-      this.classList.add("dragging");
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      if (draggedItem !== this) {
-        const allItems = Array.from(document.querySelectorAll(".song-item"));
-        const draggedIndex = allItems.indexOf(draggedItem);
-        const targetIndex = allItems.indexOf(this);
-
-        if (draggedIndex < targetIndex) {
-          this.parentNode.insertBefore(draggedItem, this.nextSibling);
-        } else {
-          this.parentNode.insertBefore(draggedItem, this);
-        }
-
-        const newOrder = [];
-        document.querySelectorAll(".song-item").forEach((item) => {
-          const originalIndex = parseInt(item.dataset.index);
-          newOrder.push(songs[originalIndex]);
-        });
-        songs = newOrder;
-
-        renderSongsList();
-        generateSheets();
-        saveToStorage();
-      }
-    }
-
-    function handleDragEnd() {
-      this.classList.remove("dragging");
-    }
-
-    function calculateAutoFontSize(songCount, targetPages) {
-      const songsPerSheet = Math.ceil(songCount / targetPages);
-      
-      if (songsPerSheet > 50) return 8;
-      if (songsPerSheet > 40) return 9;
-      if (songsPerSheet > 30) return 10;
-      if (songsPerSheet > 25) return 11;
-      if (songsPerSheet > 20) return 12;
-      if (songsPerSheet > 16) return 13;
-      if (songsPerSheet > 12) return 14;
-      if (songsPerSheet > 10) return 15;
-      if (songsPerSheet > 8) return 16;
-      if (songsPerSheet > 6) return 17;
-      return 18;
-    }
-
-    function updateStats() {
-      if (songs.length === 0) {
-        statsBox.style.display = "none";
-        return;
-      }
-
-      const songCount = songs.length;
-      const targetPages = parseInt(targetPagesSelect.value) || 2;
-      
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
-      if (autoFitToggle.checked) {
-        fontSize = calculateAutoFontSize(songCount, targetPages);
-      }
-
-      statsBox.innerHTML = `📊 ${songCount} songs • ${targetPages} page(s) • Font: ${fontSize}px`;
-      statsBox.style.display = "block";
-    }
-
-    function createSheetsHTML() {
-      let html = "";
-
-      if (songs.length === 0) {
-        return html;
-      }
-
-      const churchNameText = churchName.value.trim();
-      const lineHeight = lineHeightSelect.value;
-      const columns = columnsSelect.value === "1" ? "columns-1" : "columns-2";
-      
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
-      let targetPages = 1;
-
-      if (autoFitToggle.checked) {
-        targetPages = parseInt(targetPagesSelect.value) || 2;
-        fontSize = calculateAutoFontSize(songs.length, targetPages);
-      }
-
-      const songsPerSheet = Math.ceil(songs.length / targetPages);
-
-      for (let sheetIdx = 0; sheetIdx < targetPages; sheetIdx++) {
-        html += `<div class="sheet ${columns}" style="font-size: ${fontSize}px;">`;
-
-        if (churchNameText) {
-          html += `<div class="church-header">${churchNameText}</div>`;
-        }
-
-        const startIdx = sheetIdx * songsPerSheet;
-        const endIdx = Math.min(startIdx + songsPerSheet, songs.length);
-
-        for (let i = startIdx; i < endIdx; i++) {
-          const song = songs[i];
-          html += `
-            <div class="song">
-              <div class="song-title">
-                <span class="song-number">${i + 1}.</span> ${song.title}
-              </div>
-              <div class="song-body" style="font-size: ${fontSize - 1}px; line-height: ${lineHeight};">
-                ${song.lyrics.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
-              </div>
-            </div>
-          `;
-        }
-
-        html += `</div>`;
-      }
-
-      return html;
-    }
-
-    function generateSheets() {
-      if (songs.length === 0) {
-        sheetsContainer.innerHTML = '<div style="font-size:14px; color:#a5b4fc; padding: 40px 20px; text-align: center;">Add songs to see preview.</div>';
-        return;
-      }
-
-      sheetsContainer.innerHTML = createSheetsHTML();
-    }
-
-    addSongBtn.addEventListener("click", addSong);
-    
-    songTitleInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") addSong();
-    });
-
+    // Toggle auto-fit options visibility
     autoFitToggle.addEventListener("change", () => {
       autoFitOptions.style.display = autoFitToggle.checked ? "flex" : "none";
       fontSizeSelect.disabled = autoFitToggle.checked;
-      if (songs.length > 0) generateSheets();
-      updateStats();
-      saveToStorage();
+      if (rawInput.value.trim()) {
+        generateSheets();
+        updateAutoFitInfo();
+      }
     });
 
-    [targetPagesSelect, fontSizeSelect, columnsSelect, lineHeightSelect].forEach(el => {
-      el.addEventListener("change", () => {
-        if (songs.length > 0) generateSheets();
-        updateStats();
-        saveToStorage();
-      });
+    // Update on auto-fit value changes
+    totalSongsInput.addEventListener("change", () => {
+      if (rawInput.value.trim()) {
+        generateSheets();
+        updateAutoFitInfo();
+      }
+    });
+    totalPagesSelect.addEventListener("change", () => {
+      if (rawInput.value.trim()) {
+        generateSheets();
+        updateAutoFitInfo();
+      }
+    });
+    sheetsPerPageSelect.addEventListener("change", () => {
+      if (rawInput.value.trim()) {
+        generateSheets();
+        updateAutoFitInfo();
+      }
     });
 
-    churchName.addEventListener("input", () => {
-      if (songs.length > 0) generateSheets();
-      saveToStorage();
-    });
-
-    printBtn.addEventListener("click", () => {
-      if (songs.length === 0) {
-        alert("Please add songs first!");
+    function updateAutoFitInfo() {
+      const autoFitInfo = document.getElementById("autoFitInfo");
+      if (!autoFitToggle.checked) {
+        autoFitInfo.style.display = "none";
         return;
       }
-      saveToStorage();
-      
-      // Create print content
-      sheetsContainerPrint.innerHTML = createSheetsHTML();
-      
-      // Show print container and hide others
-      document.querySelector(".no-print").style.display = "none";
-      printContainer.style.display = "block";
-      
-      // Print
-      setTimeout(() => {
-        window.print();
-        
-        // Restore after print
-        setTimeout(() => {
-          document.querySelector(".no-print").style.display = "block";
-          printContainer.style.display = "none";
-        }, 500);
-      }, 100);
-    });
 
-    clearAllBtn.addEventListener("click", () => {
-      if (confirm("Are you sure you want to clear all songs?")) {
-        songs = [];
-        songTitleInput.value = "";
-        songLyricsInput.value = "";
-        renderSongsList();
-        generateSheets();
-        updateStats();
-        saveToStorage();
+      const text = rawInput.value.trim();
+      if (!text) return;
+
+      const rawSongs = text.split(/\n-{3,}\n/g).filter(s => s.trim().length > 0);
+      const actualSongCount = rawSongs.length;
+      const totalPages = parseInt(totalPagesSelect.value, 10) || 2;
+      const sheetsPerPage = parseInt(sheetsPerPageSelect.value, 10) || 1;
+      const totalSheets = totalPages * sheetsPerPage;
+      const songsPerSheet = Math.ceil(actualSongCount / totalSheets);
+      const fontSize = calculateAutoFitFontSize(actualSongCount);
+
+      document.getElementById("songCountDisplay").textContent = actualSongCount;
+      document.getElementById("pageCountDisplay").textContent = totalSheets + " sheets";
+      document.getElementById("fontSizeDisplay").textContent = fontSize;
+
+      autoFitInfo.style.display = "block";
+    }
+
+    function calculateAutoFitFontSize(actualSongCount) {
+      const totalPages = parseInt(totalPagesSelect.value, 10) || 2;
+      const sheetsPerPage = parseInt(sheetsPerPageSelect.value, 10) || 1;
+      
+      // Total A4 sheets = physical pages × sheets per page
+      const totalSheets = totalPages * sheetsPerPage;
+      
+      // ALL songs must fit in the selected sheets
+      const songsPerSheet = actualSongCount / totalSheets;
+      
+      // Aggressive font sizing to fit ALL songs
+      // More songs = much smaller font
+      let fontSize = 13; // default
+      
+      if (songsPerSheet > 50) {
+        fontSize = 8;
+      } else if (songsPerSheet > 40) {
+        fontSize = 9;
+      } else if (songsPerSheet > 30) {
+        fontSize = 10;
+      } else if (songsPerSheet > 25) {
+        fontSize = 11;
+      } else if (songsPerSheet > 20) {
+        fontSize = 12;
+      } else if (songsPerSheet > 16) {
+        fontSize = 13;
+      } else if (songsPerSheet > 12) {
+        fontSize = 14;
+      } else if (songsPerSheet > 10) {
+        fontSize = 15;
+      } else if (songsPerSheet > 8) {
+        fontSize = 16;
+      } else if (songsPerSheet > 6) {
+        fontSize = 17;
+      } else if (songsPerSheet > 4) {
+        fontSize = 18;
+      } else {
+        fontSize = 20;
       }
-    });
+      
+      return fontSize;
+    }
 
-    window.onclick = function(event) {
-      if (event.target == editModal) {
-        closeEditModal();
+    function clearSheets() {
+      while (sheetsContainer.firstChild) {
+        sheetsContainer.removeChild(sheetsContainer.firstChild);
       }
     }
 
-    loadFromStorage();
+    function generateSheets() {
+      const text = rawInput.value.trim();
+      clearSheets();
+
+      if (!text) {
+        sheetsContainer.appendChild(emptyState);
+        return;
+      }
+
+      // Songs are separated by a line containing --- (3 or more dashes)
+      const rawSongs = text.split(/\n-{3,}\n/g).filter(s => s.trim().length > 0);
+      const actualSongCount = rawSongs.length;
+
+      let fontSize = parseInt(fontSizeSelect.value, 10) || 13;
+      let totalPages = 1;
+      let sheetsPerPage = 1;
+      
+      // Use auto-calculated font size if enabled
+      if (autoFitToggle.checked) {
+        totalPages = parseInt(totalPagesSelect.value, 10) || 2;
+        sheetsPerPage = parseInt(sheetsPerPageSelect.value, 10) || 1;
+        fontSize = calculateAutoFitFontSize(actualSongCount);
+      }
+      
+      const columns = columnsSelect.value === "1" ? "columns-1" : "columns-2";
+      const churchNameText = churchName.value.trim();
+
+      // Total A4 sheets = physical pages × sheets per page
+      const totalSheets = totalPages * sheetsPerPage;
+      
+      // Calculate songs per sheet
+      const songsPerSheet = Math.ceil(actualSongCount / totalSheets);
+
+      // Create multiple A4 sheets
+      for (let sheetNum = 0; sheetNum < totalSheets; sheetNum++) {
+        const sheet = document.createElement("div");
+        sheet.className = "sheet " + columns;
+        sheet.style.fontSize = fontSize + "px";
+
+        // Add church name header if provided
+        if (churchNameText) {
+          const headerEl = document.createElement("div");
+          headerEl.className = "church-header";
+          headerEl.textContent = churchNameText;
+          sheet.appendChild(headerEl);
+        }
+
+        // Calculate song range for this sheet
+        const startIndex = sheetNum * songsPerSheet;
+        const endIndex = Math.min(startIndex + songsPerSheet, actualSongCount);
+
+        // Add songs to this sheet
+        for (let i = startIndex; i < endIndex; i++) {
+          const block = rawSongs[i];
+          const trimmed = block.trim();
+          if (!trimmed) continue;
+
+          const lines = trimmed.split("\n").map(l => l.trim());
+          if (lines.length === 0) continue;
+
+          const title = lines[0];
+          const bodyLines = lines.slice(1).join("\n");
+
+          const songEl = document.createElement("div");
+          songEl.className = "song";
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "song-title";
+
+          const numberSpan = document.createElement("span");
+          numberSpan.className = "song-number";
+          numberSpan.textContent = (i + 1) + ".";
+
+          const titleSpan = document.createElement("span");
+          titleSpan.textContent = " " + title;
+
+          titleEl.appendChild(numberSpan);
+          titleEl.appendChild(titleSpan);
+
+          const bodyEl = document.createElement("div");
+          bodyEl.className = "song-body";
+          bodyEl.style.fontSize = fontSize - 1 + "px";
+          bodyEl.textContent = bodyLines;
+
+          songEl.appendChild(titleEl);
+          songEl.appendChild(bodyEl);
+
+          sheet.appendChild(songEl);
+        }
+
+        sheetsContainer.appendChild(sheet);
+      }
+    }
+
+    generateBtn.addEventListener("click", () => {
+      generateSheets();
+      updateAutoFitInfo();
+    });
+
+    // Optional: live update on change of font/columns
+    fontSizeSelect.addEventListener("change", () => {
+      if (!autoFitToggle.checked && rawInput.value.trim()) generateSheets();
+    });
+    columnsSelect.addEventListener("change", () => {
+      if (rawInput.value.trim()) {
+        generateSheets();
+        updateAutoFitInfo();
+      }
+    });
+    churchName.addEventListener("change", () => {
+      if (rawInput.value.trim()) generateSheets();
+    });
+    
+    // Update info when user pastes songs
+    rawInput.addEventListener("input", () => {
+      updateAutoFitInfo();
+    });
   </script>
 </body>
 </html>
+
+
