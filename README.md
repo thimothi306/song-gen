@@ -33,7 +33,7 @@ A4 print-optimized (no margins / clean layout)
 ▶️ How to Run Locally
 
 No server required
-Clone the repo:git clone https://github.com/thimothi306/song-sheet-generator.git
+Clone the repo:git clone https://github.com/thimothi306/song-gen.git
 Open:
 index.html
 
