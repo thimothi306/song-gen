@@ -967,7 +967,7 @@
       const songCount = songs.length;
       const targetPages = parseInt(targetPagesSelect.value) || 2;
       
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
+      let fontSize = parseFloat(fontSizeSelect.value) || 13;
       if (autoFitToggle.checked) {
         fontSize = calculateAutoFontSize(songCount, targetPages);
       }
@@ -987,7 +987,7 @@
       const lineHeight = lineHeightSelect.value;
       const columns = columnsSelect.value === "1" ? "columns-1" : "columns-2";
       
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
+      let fontSize = parseFloat(fontSizeSelect.value) || 13;
       let targetPages = 1;
 
       if (autoFitToggle.checked) {
