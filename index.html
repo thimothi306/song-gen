@@ -10,7 +10,7 @@
     * {
       box-sizing: border-box;
     }
- 
+
     body {
       margin: 0;
       padding: 0;
@@ -336,6 +336,8 @@
       white-space: pre-line;
       color: #000 !important;
       font-weight: 500;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     .church-header {
@@ -444,6 +446,25 @@
       flex-wrap: wrap;
     }
 
+    .song-item.is-compact {
+      border-color: #f59e0b;
+      background: linear-gradient(135deg, #fffbeb 0%, #fff7ed 100%);
+    }
+
+    .btn-compact {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+      padding: 10px 16px;
+      font-size: 13px;
+    }
+
+    .btn-compact:hover {
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-compact.active {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
     .empty-songs {
       padding: 30px 20px;
       text-align: center;
@@ -532,10 +553,16 @@
     }
 
     .left-right-section {
-      flex: 1;
+      flex: 1 1 50%;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       gap: 24px;
+    }
+
+    .card.preview-card {
+      flex: 1 1 50%;
+      min-width: 0;
     }
   </style>
 </head>
@@ -584,79 +611,16 @@
               </div>
 
               <div class="row">
-               <div class="form-group">
+                <div class="form-group">
                   <label for="fontSize">Font Size</label>
                   <select id="fontSize">
-                    <option value="11">11.0px</option>
-                    <option value="11.1">11.1px</option>
-                    <option value="11.2">11.2px</option>
-                    <option value="11.3">11.3px</option>
-                    <option value="11.4">11.4px</option>
-                    <option value="11.5">11.5px</option>
-                    <option value="11.6">11.6px</option>
-                    <option value="11.7">11.7px</option>
-                    <option value="11.8">11.8px</option>
-                    <option value="11.9">11.9px</option>
-                    <option value="12">12.0px</option>
-                    <option value="12.1">12.1px</option>
-                    <option value="12.2">12.2px</option>
-                    <option value="12.3">12.3px</option>
-                    <option value="12.4">12.4px</option>
-                    <option value="12.5">12.5px</option>
-                    <option value="12.6">12.6px</option>
-                    <option value="12.7">12.7px</option>
-                    <option value="12.8">12.8px</option>
-                    <option value="12.9">12.9px</option>
-                    <option value="13" selected>13.0px</option>
-                    <option value="13.1">13.1px</option>
-                    <option value="13.2">13.2px</option>
-                    <option value="13.3">13.3px</option>
-                    <option value="13.4">13.4px</option>
-                    <option value="13.5">13.5px</option>
-                    <option value="13.6">13.6px</option>
-                    <option value="13.7">13.7px</option>
-                    <option value="13.8">13.8px</option>
-                    <option value="13.9">13.9px</option>
-                    <option value="14">14.0px</option>
-                    <option value="14.1">14.1px</option>
-                    <option value="14.2">14.2px</option>
-                    <option value="14.3">14.3px</option>
-                    <option value="14.4">14.4px</option>
-                    <option value="14.5">14.5px</option>
-                    <option value="14.6">14.6px</option>
-                    <option value="14.7">14.7px</option>
-                    <option value="14.8">14.8px</option>
-                    <option value="14.9">14.9px</option>
-                    <option value="15">15.0px</option>
-                    <option value="15.1">15.1px</option>
-                    <option value="15.2">15.2px</option>
-                    <option value="15.3">15.3px</option>
-                    <option value="15.4">15.4px</option>
-                    <option value="15.5">15.5px</option>
-                    <option value="15.6">15.6px</option>
-                    <option value="15.7">15.7px</option>
-                    <option value="15.8">15.8px</option>
-                    <option value="15.9">15.9px</option>
-                    <option value="16">16.0px</option>
-                    <option value="16.1">16.1px</option>
-                    <option value="16.2">16.2px</option>
-                    <option value="16.3">16.3px</option>
-                    <option value="16.4">16.4px</option>
-                    <option value="16.5">16.5px</option>
-                    <option value="16.6">16.6px</option>
-                    <option value="16.7">16.7px</option>
-                    <option value="16.8">16.8px</option>
-                    <option value="16.9">16.9px</option>
-                    <option value="17">17.0px</option>
-                    <option value="17.1">17.1px</option>
-                    <option value="17.2">17.2px</option>
-                    <option value="17.3">17.3px</option>
-                    <option value="17.4">17.4px</option>
-                    <option value="17.5">17.5px</option>
-                    <option value="17.6">17.6px</option>
-                    <option value="17.7">17.7px</option>
-                    <option value="17.8">17.8px</option>
-                    <option value="17.9">17.9px</option>
+                    <option value="11">11px</option>
+                    <option value="12">12px</option>
+                    <option value="13" selected>13px</option>
+                    <option value="14">14px</option>
+                    <option value="15">15px</option>
+                    <option value="16">16px</option>
+                    <option value="17">17px</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -829,7 +793,7 @@
         return;
       }
 
-      songs.push({ lyrics });
+      songs.push({ lyrics, compact: false });
       songLyricsInput.value = "";
       songLyricsInput.focus();
       renderSongsList();
@@ -839,10 +803,18 @@
     }
 
     function removeSong(index) {
+      if (!confirm("Are you sure you want to delete this song?")) return;
       songs.splice(index, 1);
       renderSongsList();
       generateSheets();
       updateStats();
+      saveToStorage();
+    }
+
+    function toggleCompact(index) {
+      songs[index].compact = !songs[index].compact;
+      renderSongsList();
+      generateSheets();
       saveToStorage();
     }
 
@@ -868,7 +840,7 @@
         return;
       }
 
-      songs[editingIndex] = { lyrics };
+      songs[editingIndex] = { lyrics, compact: songs[editingIndex].compact || false };
       closeEditModal();
       renderSongsList();
       generateSheets();
@@ -883,13 +855,14 @@
       }
 
       songsList.innerHTML = songs.map((song, index) => `
-        <div class="song-item" draggable="true" data-index="${index}">
+        <div class="song-item${song.compact ? ' is-compact' : ''}" draggable="true" data-index="${index}">
           <div class="song-item-header">
             <span class="song-item-number">${index + 1}</span>
         <span class="song-item-title">${song.lyrics.split('\n')[0]}</span>
           </div>
           <div class="song-item-actions">
             <button class="btn-warning" onclick="openEditModal(${index})">✏️ Edit</button>
+            <button class="btn-compact${song.compact ? ' active' : ''}" onclick="toggleCompact(${index})">🗜️ ${song.compact ? 'Compact ✓' : 'Compress'}</button>
             <button class="btn-danger" onclick="removeSong(${index})">✕ Delete</button>
           </div>
         </div>
@@ -967,7 +940,7 @@
       const songCount = songs.length;
       const targetPages = parseInt(targetPagesSelect.value) || 2;
       
-      let fontSize = parseFloat(fontSizeSelect.value) || 13;
+      let fontSize = parseInt(fontSizeSelect.value) || 13;
       if (autoFitToggle.checked) {
         fontSize = calculateAutoFontSize(songCount, targetPages);
       }
@@ -987,7 +960,7 @@
       const lineHeight = lineHeightSelect.value;
       const columns = columnsSelect.value === "1" ? "columns-1" : "columns-2";
       
-      let fontSize = parseFloat(fontSizeSelect.value) || 13;
+      let fontSize = parseInt(fontSizeSelect.value) || 13;
       let targetPages = 1;
 
       if (autoFitToggle.checked) {
@@ -1012,10 +985,13 @@
       const lyricsLines = song.lyrics.split('\n');
       const firstLine = lyricsLines[0];
       const restLines = lyricsLines.slice(1).join('\n');
-      
+
+      const songFontSize = song.compact ? Math.max(8, fontSize - 3) : fontSize;
+      const songLineHeight = song.compact ? Math.max(1.0, (parseFloat(lineHeight) - 0.2)).toFixed(2) : lineHeight;
+
        html += `
         <div class="song">
-          <div class="song-body" style="font-size: ${fontSize}px; line-height: ${lineHeight};">
+          <div class="song-body" style="font-size: ${songFontSize}px; line-height: ${songLineHeight};">
             <strong><span class="song-number">${i + 1}.</span> ${firstLine.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</strong>${restLines ? '\n' + restLines.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''}
           </div>
         </div>
