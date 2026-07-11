@@ -612,16 +612,8 @@
 
               <div class="row">
                 <div class="form-group">
-                  <label for="fontSize">Font Size</label>
-                  <select id="fontSize">
-                    <option value="11">11px</option>
-                    <option value="12">12px</option>
-                    <option value="13" selected>13px</option>
-                    <option value="14">14px</option>
-                    <option value="15">15px</option>
-                    <option value="16">16px</option>
-                    <option value="17">17px</option>
-                  </select>
+                  <label for="fontSize">Font Size (px)</label>
+                  <input type="number" id="fontSize" min="8" max="20" step="0.1" value="13">
                 </div>
                 <div class="form-group">
                   <label for="lineHeight">Line Height</label>
@@ -940,7 +932,7 @@
       const songCount = songs.length;
       const targetPages = parseInt(targetPagesSelect.value) || 2;
       
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
+      let fontSize = parseFloat(fontSizeSelect.value) || 13;
       if (autoFitToggle.checked) {
         fontSize = calculateAutoFontSize(songCount, targetPages);
       }
@@ -960,7 +952,7 @@
       const lineHeight = lineHeightSelect.value;
       const columns = columnsSelect.value === "1" ? "columns-1" : "columns-2";
       
-      let fontSize = parseInt(fontSizeSelect.value) || 13;
+      let fontSize = parseFloat(fontSizeSelect.value) || 13;
       let targetPages = 1;
 
       if (autoFitToggle.checked) {
