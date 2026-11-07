@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1e3a8a">
+  <title>Service List Importer | Song Sheet Generator</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600&family=Inter:wght@400;600;700&display=swap">
+  <style>
+    :root { color-scheme: light; font-family: Inter, "Noto Sans Telugu", system-ui, sans-serif; color: #172554; background: #f3f6ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 28px 16px 48px; }
+    main { max-width: 900px; margin: auto; }
+    h1 { margin: 0 0 8px; color: #1e3a8a; }
+    .intro, .note { line-height: 1.6; color: #475569; }
+    .card { background: white; border: 1px solid #dbe4ff; border-radius: 16px; padding: 22px; margin: 18px 0; box-shadow: 0 8px 24px #1e3a8a12; }
+    label { display: block; font-weight: 700; margin: 14px 0 7px; }
+    textarea, input[type="text"], input[type="file"] { width: 100%; border: 1px solid #b8c5e8; border-radius: 9px; padding: 11px; font: inherit; background: #fff; }
+    textarea { min-height: 150px; resize: vertical; line-height: 1.65; }
+    #rawText { min-height: 190px; }
+    button, .link-button { border: 0; border-radius: 9px; padding: 11px 16px; font: inherit; font-weight: 700; color: white; background: #1e40af; cursor: pointer; text-decoration: none; display: inline-block; }
+    button:hover, .link-button:hover { background: #1e3a8a; }
+    button.secondary { background: #475569; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .status { min-height: 1.5em; color: #1e3a8a; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid > div { min-width: 0; }
+    .small { font-size: .92rem; color: #64748b; }
+    @media (max-width: 650px) { .grid { grid-template-columns: 1fr; } .card { padding: 16px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Import a service list</h1>
+  <p class="intro">Paste a service plan or upload an image. The importer reads the text and separates the date, song list, message, and offering into editable fields. Check the result carefully—especially Telugu OCR—before saving.</p>
+
+  <section class="card" aria-labelledby="inputHeading">
+    <h2 id="inputHeading">1. Add your list</h2>
+    <label for="imageFile">Upload an image (optional)</label>
+    <input id="imageFile" type="file" accept="image/*">
+    <p class="small">Image recognition runs in your browser using Tesseract.js and downloads the Telugu/English language data when needed. Internet access is required for the first OCR run.</p>
+    <div class="actions"><button id="ocrButton" type="button">Read image</button></div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <label for="rawText">Or paste / correct the recognized text</label>
+    <textarea id="rawText" placeholder="Example:&#10;Date: 8th Nov 2026 - Morning &amp; Evening Service&#10;Songs&#10;పల్లెలాయ స్తుతి మహిమ&#10;...&#10;Message&#10;...&#10;Offering&#10;..."></textarea>
+    <div class="actions"><button id="organizeButton" type="button">Organize into sections</button></div>
+  </section>
+
+  <section class="card" aria-labelledby="reviewHeading">
+    <h2 id="reviewHeading">2. Review and edit</h2>
+    <label for="serviceDate">Date / service name</label>
+    <input id="serviceDate" type="text" placeholder="e.g. 8th Nov 2026 - Morning &amp; Evening Service">
+    <div class="grid">
+      <div>
+        <label for="songNames">Songs (one title or opening line per line)</label>
+        <textarea id="songNames" placeholder="One song per line"></textarea>
+      </div>
+      <div>
+        <label for="messageText">Message</label>
+        <textarea id="messageText" placeholder="Message title or notes"></textarea>
+      </div>
+    </div>
+    <label for="offeringText">Offering</label>
+    <textarea id="offeringText" placeholder="Offering song or notes" style="min-height: 90px"></textarea>
+    <div class="actions">
+      <button id="saveButton" type="button">Save service draft</button>
+      <a class="link-button" href="./index.html">Open song sheet generator</a>
+    </div>
+    <p id="savedStatus" class="status" role="status" aria-live="polite"></p>
+    <p class="note">This first step saves an editable service-list draft in this browser. It does not search for or download lyrics yet; that will be the next step after you confirm the extracted song names.</p>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" crossorigin="anonymous"></script>
+<script>
+  const imageFile = document.getElementById('imageFile');
+  const rawText = document.getElementById('rawText');
+  const status = document.getElementById('status');
+
+  function setField(id, value) { document.getElementById(id).value = value; }
+  function cleanLines(text) { return text.split(/\r?\n/).map(line => line.trim()).filter(Boolean); }
+
+  function organizeText() {
+    const lines = cleanLines(rawText.value);
+    const sections = { date: [], songs: [], message: [], offering: [], other: [] };
+    let current = 'other';
+    const heading = /^(songs?|సాంగ్స్)\s*[:：]?$/i;
+    const messageHeading = /^(message|ప్రసంగం|సందేశం)\s*[:：]?$/i;
+    const offeringHeading = /^(offering|కానుక|అర్పణ)\s*[:：]?$/i;
+    const dateLine = /^(date\s*[:：]?\s*|తేదీ\s*[:：]?\s*)/i;
+
+    for (const line of lines) {
+      if (heading.test(line)) { current = 'songs'; continue; }
+      if (messageHeading.test(line)) { current = 'message'; continue; }
+      if (offeringHeading.test(line)) { current = 'offering'; continue; }
+      if (dateLine.test(line)) { sections.date.push(line.replace(dateLine, '').trim()); continue; }
+      sections[current].push(line);
+    }
+
+    // If there is no explicit Songs heading, treat the first unlabeled lines as song entries.
+    if (!sections.songs.length && sections.other.length) sections.songs = sections.other.splice(0);
+    setField('serviceDate', sections.date.join(' '));
+    setField('songNames', sections.songs.join('\n'));
+    setField('messageText', sections.message.join('\n'));
+    setField('offeringText', sections.offering.join('\n'));
+    document.getElementById('savedStatus').textContent = 'Sections organized. Review and edit them before saving.';
+  }
+
+  document.getElementById('organizeButton').addEventListener('click', organizeText);
+  document.getElementById('ocrButton').addEventListener('click', async () => {
+    const file = imageFile.files && imageFile.files[0];
+    if (!file) { status.textContent = 'Choose an image first.'; return; }
+    if (!window.Tesseract) { status.textContent = 'OCR library could not load. Check your internet connection, then reload this page.'; return; }
+    const button = document.getElementById('ocrButton');
+    button.disabled = true;
+    status.textContent = 'Loading Telugu and English OCR…';
+    try {
+      const result = await Tesseract.recognize(file, 'tel+eng', {
+        logger: message => {
+          if (message.status) status.textContent = message.status + (message.progress ? ' (' + Math.round(message.progress * 100) + '%)' : '…');
+        }
+      });
+      rawText.value = result.data.text.trim();
+      status.textContent = 'Image text recognized. Please correct any mistakes, then organize the sections.';
+    } catch (error) {
+      console.error(error);
+      status.textContent = 'Could not read that image. Try a clearer image or paste the text instead.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById('saveButton').addEventListener('click', () => {
+    const draft = {
+      date: document.getElementById('serviceDate').value.trim(),
+      songs: cleanLines(document.getElementById('songNames').value),
+      message: document.getElementById('messageText').value.trim(),
+      offering: document.getElementById('offeringText').value.trim(),
+      updatedAt: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem('songGenServiceDraft', JSON.stringify(draft));
+      document.getElementById('savedStatus').textContent = 'Draft saved in this browser (' + draft.songs.length + ' song entries).';
+    } catch (error) {
+      document.getElementById('savedStatus').textContent = 'Could not save the draft in this browser. Check available storage.';
+    }
+  });
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('songGenServiceDraft') || 'null');
+    if (saved) {
+      setField('serviceDate', saved.date || '');
+      setField('songNames', Array.isArray(saved.songs) ? saved.songs.join('\n') : '');
+      setField('messageText', saved.message || '');
+      setField('offeringText', saved.offering || '');
+      document.getElementById('savedStatus').textContent = 'Loaded your saved service draft.';
+    }
+  } catch (_) { /* Ignore malformed or unavailable saved data. */ }
+</script>
+</body>
+</html>
